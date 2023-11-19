@@ -1,1 +1,1 @@
-# meal-planner
+# QEC Programming Challenge 2023

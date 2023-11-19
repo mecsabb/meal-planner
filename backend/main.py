@@ -1,19 +1,16 @@
 from fastapi import FastAPI
 import pandas as pd
 import numpy as np
+from pydantic import BaseModel
+import json
 
-# class user:
-#     def __init__(self):
-#         likes = []
-#         dislikes = []
-#     def set_preferences(self, recipe_ids, l_d):
-#         for curr_id, pref in recipe_ids, l_d:
-#             if pref == 0:
-#                 self.dislikes.append(curr_id)
-#             elif pref == 1:
-#                 self.likes.append(curr_id)
+import model
 
-recipes_df = pd.read_csv('/Users/colin.gould/Desktop/code/QEC/meal-planner/archive/RAW_recipes.csv')
+class Preferences(BaseModel):
+    recipe_id: str
+    like: int
+
+recipes_df = pd.read_csv('_part.csv')
 
 app = FastAPI()
 
@@ -24,21 +21,21 @@ async def root():
 @app.get("/arbitrary-meals")
 async def get_arb_meal():
     length = len(recipes_df)
-    curr_id = recipes_df['id'].iloc[np.random.randint(0, length)]
-    return pd.DataFrame(recipes_df.loc[recipes_df['id'] == curr_id]).to_dict()
+    curr_id = recipes_df['recipe_id'].iloc[np.random.randint(0, length)]
+    return pd.DataFrame(recipes_df.loc[recipes_df['recipe_id'] == curr_id]).to_dict()
 
 @app.post("/preferences")
-async def post_user_prefs(recipes):
-    recipe_ids = recipes.keys()
-    like_dislike = recipes.values()
-    data = [recipe_ids, like_dislike]
-    prefs = pd.read_csv('preferences.csv')
-    updates = pd.DataFrame(data, columns = ['recipe_ids', 'like_or_dislike'])
-    new = pd.concat([prefs, updates], ignore_index = True)
-    new.to_csv('preferences.csv')
-    return 1
-    
-    
+async def post_user_prefs(preferences: Preferences):
+    df = pd.read_csv('dataset.csv')
+    json
+    #for recipe, like in zip(recipes.name(), recipes.values()):
+    #    row = [-1, int(recipe), like]
+    #    df.loc[len(df)] = row
+    row = [len(df), -1, int(preferences["recipe_id"]), preferences["like"]]
+    df.loc[len(df)] = row
+    df.to_csv('dataset.csv', index=False)
+
 @app.get("/good-meals")
 async def get_good_meals():
-    pass
+    dg = model.DataGen()
+    dg.getRecommendations()

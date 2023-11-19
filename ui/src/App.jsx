@@ -11,7 +11,7 @@ function App() {
       <div className='container'>
       <Container size={'100%'}>
             <Title className='title'>
-                MuckTent
+                MealMap
             </Title>
             <Text className='text'>
                 Customize your meal preferences, or generate meal recommendations

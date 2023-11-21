@@ -26,12 +26,11 @@ async def get_arb_meal():
 
 @app.post("/preferences")
 async def post_user_prefs(preferences: Preferences):
+    print('#####')
+    print(preferences)
+    print('#####')
     df = pd.read_csv('dataset.csv')
-    json
-    #for recipe, like in zip(recipes.name(), recipes.values()):
-    #    row = [-1, int(recipe), like]
-    #    df.loc[len(df)] = row
-    row = [len(df), -1, int(preferences["recipe_id"]), preferences["like"]]
+    row = [-1, preferences.recipe_id, preferences.like]
     df.loc[len(df)] = row
     df.to_csv('dataset.csv', index=False)
 

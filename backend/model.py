@@ -18,21 +18,18 @@ class DataGen:
         
         df = pd.read_csv('dataset.csv')
         self.df = df
-        self._part = pd.read_csv('_part.csv')
-        self.new_recipeID = dict(zip(list(self._part['recipe_id'].unique()),
-                      list(range(len(self._part['recipe_id'].unique())))))
 
-        n_users = df.user_id.unique()
-        n_items = df.recipe_id.unique()
+        users = df.user_id.unique()
+        items = df.recipe_id.unique()
 
-        data_matrix = np.zeros((n_users.shape[0], n_items.shape[0]))
+        data_matrix = np.zeros((users.shape[0], items.shape[0]))
 
         for row in df.itertuples():
             data_matrix[row[1]-1, row[2]-1] = row[3]
 
         self.user_similarity = 1 - pairwise_distances(data_matrix, metric = 'cosine')
-        self.user_pred = predict(data_matrix, self.user_similarity, _type = 'user')
-        self.user_pred_df = pd.DataFrame(self.user_pred, columns = list(n_items))
+        self.user_pred = predict(data_matrix, self.user_similarity)
+        self.user_pred_df = pd.DataFrame(self.user_pred, columns = list(items))
 
     def getRecommendations(self, user_id=-1, top_n = 10):
         
